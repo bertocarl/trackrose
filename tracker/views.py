@@ -23,8 +23,6 @@ from _thread import start_new_thread
 
 
 def home(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     return render(request, "home.html",
                   {'photos': trainer.get_nbr_photos(),
                    'users': User.objects.count(),
@@ -42,8 +40,6 @@ def login(request):
         else:
             return render(request, 'login.html')
     elif request.method == 'GET':
-        # if request.user.is_authenticated():
-        #     return redirect(home)
         return render(request, 'login.html')
 
 
@@ -53,14 +49,10 @@ def logout(request):
 
 
 def about(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     return render(request, 'about.html', {})
 
 
 def add_user(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     if request.method == 'POST':
         form = UserForm(request.POST, request.FILES)
         instance = form.save(commit=False)
@@ -70,22 +62,16 @@ def add_user(request):
 
 
 def capture(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     if User.objects.count() == 0:
         return redirect('/adduser/?status=empty')
     return render(request, 'capture.html', {'users': User.objects.all()})
 
 
 def display_users(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     return render(request, 'user.html', {'users': User.objects.all()})
 
 
 def train(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     if not utility.are_there_photos():
         return redirect('/capture/?status=empty')
     return render(request, 'train.html')
@@ -98,8 +84,6 @@ def handler404(request):
 
 
 def receive_images(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     if not request.is_ajax():
         return redirect(handler404)
     label = request.POST.get('label')
@@ -109,28 +93,21 @@ def receive_images(request):
 
 
 def receive_train(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     if not request.is_ajax():
         return redirect(handler404)
     start = time.time()
-    #trainer.train()
     start_new_thread(face_recognizer.reload, ())
     duration = ceil(time.time() - start)
     return JsonResponse({'duration': duration})
 
 
 def profile(request, id=1):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     user_data = User.objects.get(pk=id)
     images = [filename for filename in os.listdir(photos_path) if filename.split('_')[0] == str(id)]
     return render(request, 'profile.html', {'user': user_data, 'images': images})
 
 
 def delete_user(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     if not request.is_ajax():
         return redirect(handler404)
     user_id = request.POST.get('id')
@@ -142,16 +119,12 @@ def delete_user(request):
 
 
 def recognize_camera(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     if not utility.is_model_trained():
         return redirect('/train/?status=untrained')
     return render(request, 'camera.html')
 
 
 def receive_recognize(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     if not request.is_ajax():
         return redirect(handler404)
     photos = request.POST.getlist('photos[]')
@@ -176,16 +149,12 @@ def receive_recognize(request):
 
 
 def recognize_photo(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     if not utility.is_model_trained():
         return redirect('/train/?status=untrained')
     return render(request, 'recognise_photo.html')
 
 
 def view_photos(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     users = User.objects.all()
     data = []
     for user in users:
@@ -195,8 +164,6 @@ def view_photos(request):
 
 
 def edit_user(request, id=None):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     instance = User.objects.get(id=id)
     form = UserForm(request.POST or None, request.FILES or None, instance=instance)
     if request.method == 'POST':
@@ -207,8 +174,6 @@ def edit_user(request, id=None):
 
 
 def remote_capture(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     if not request.is_ajax():
         return redirect(handler404)
     user = request.GET.get('user')
@@ -279,6 +244,4 @@ def save_tasks(request):
 
 
 def attendance(request):
-    # if not request.user.is_authenticated():
-    #     return redirect(login)
     return render(request, 'attendance.html', {'attendance': Attendance.objects.all()})

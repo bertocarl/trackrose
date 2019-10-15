@@ -50,10 +50,8 @@ else:
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.0.101', '172.19.1.248']
-ALLOWED_HOSTS = config('ALLOWED_HOSTS',cast=Csv())# Application definition
 
-# Application definition
+ALLOWED_HOSTS = config('ALLOWED_HOSTS',cast=Csv())# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -62,10 +60,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tracker.apps.TrackerConfig',
+    # 'tracker.apps.TrackerConfig',
     'rest_framework',
-    'sslserver',
-    
+    'tracker'
 ]
 
 MIDDLEWARE = [
@@ -106,8 +103,8 @@ WSGI_APPLICATION = 'tracker.wsgi.application'
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'tracker',
-#         'USER': 'postgres',
+#         'NAME': 'rose',
+#         'USER': 'berto',
 #         'PASSWORD': 'fiddlediddle',
 #         'HOST': 'localhost',
 #         'PORT': '5432'
@@ -137,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
@@ -150,9 +147,17 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Add static folder to STATIC_DIRS
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+STATICFILES_DIR=[
+    os.path.join(BASE_DIR,'static')
+]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#Configure Django App for Heroku
+django_heroku.settings(locals())
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',

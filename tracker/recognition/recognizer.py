@@ -30,9 +30,9 @@ class Recognizer:
         #self.reload()
 
     def reload(self):
-        self.lbph_rec = cv2.face.createLBPHFaceRecognizer()
-        self.eigenface_rec = cv2.face.createEigenFaceRecognizer()
-        self.fisherface_rec = cv2.face.createFisherFaceRecognizer()
+        self.lbph_rec = cv2.face.LBPHFaceRecognizer_create()
+        self.eigenface_rec = cv2.face.EigenFaceRecognizer_create()
+        self.fisherface_rec = cv2.face.FisherFaceRecognizer_create()
         for recognizer, name in (
                 (self.lbph_rec, 'lbph'), (self.eigenface_rec, 'eigenface'), (self.fisherface_rec, 'fisherface')):
             try:

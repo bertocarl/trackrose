@@ -1,4 +1,5 @@
-from cv2 import CascadeClassifier
+import cv2
+from cv2 import *
 
 """
     This configuration file contains some common used data
